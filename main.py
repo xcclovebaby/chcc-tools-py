@@ -56,7 +56,7 @@ class MainUi(QWidget):
 
     def initGUI(self):
         QToolTip.setFont(QFont('SansSerif', 10))
-        self.setWindowTitle("三体云动会员跟进辅助程序")
+        self.setWindowTitle("三体云动会员跟进辅助程序v1.0 (CHCC主页:githun.com/xcclovebaby)")
         self.setFixedSize(600, 800)
 
         # 外层容器
@@ -86,9 +86,10 @@ class MainUi(QWidget):
         self.end = QLineEdit()
 
         # 内容输入框
-        self.content = QLineEdit()
+        self.content = QTextEdit()
+        self.content.ensureCursorVisible()
         self.content.setPlaceholderText("请输入跟进内容")
-        self.content.setFixedSize(500, 100)
+        self.content.setFixedSize(490, 100)
 
         # 服务方式下拉框
         typeBox = QComboBox(self)
