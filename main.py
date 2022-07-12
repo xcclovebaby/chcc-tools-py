@@ -87,7 +87,6 @@ class MainUi(QWidget):
 
         # 内容输入框
         self.content = QTextEdit()
-        self.content.ensureCursorVisible()
         self.content.setPlaceholderText("请输入跟进内容")
         self.content.setFixedSize(490, 100)
 
@@ -171,7 +170,7 @@ class MainUi(QWidget):
         self.contact_result = resultMap.get(value)
 
     def OnBtnClicked(self):
-        content = self.content.text()
+        content = self.content.document()
         username = self.usernameInput.text()
         password = self.paswwordInput.text()
         end = int(self.end.text())
@@ -185,14 +184,14 @@ class MainUi(QWidget):
                 if staff_id is None:
                     staff_id = saleMember(cookie, memberId)
                 submit(cookie=cookie,
-                 staff_id=staff_id, 
-                 time=time, 
-                 content=content, 
-                 memberId=memberId,
-                 concat_type=self.concat_type,
-                 contact_status=self.contact_status,
-                 contact_result=self.contact_result,
-                 type = self.paramter)
+                         staff_id=staff_id,
+                         time=time,
+                         content=content,
+                         memberId=memberId,
+                         concat_type=self.concat_type,
+                         contact_status=self.contact_status,
+                         contact_result=self.contact_result,
+                         type = self.paramter)
             print("当前页码 %d" % start)
             start += 1
             list = followMember(cookie, start)
