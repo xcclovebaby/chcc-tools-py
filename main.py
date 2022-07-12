@@ -184,15 +184,15 @@ class MainUi(QWidget):
                 print(content)
                 if staff_id is None:
                     staff_id = saleMember(cookie, memberId)
-                # submit(cookie=cookie,
-                #          staff_id=staff_id,
-                #          time=time,
-                #          content=content,
-                #          memberId=memberId,
-                #          concat_type=self.concat_type,
-                #          contact_status=self.contact_status,
-                #          contact_result=self.contact_result,
-                #          type = self.paramter)
+                submit(cookie=cookie,
+                         staff_id=staff_id,
+                         time=time,
+                         content=content,
+                         memberId=memberId,
+                         concat_type=self.concat_type,
+                         contact_status=self.contact_status,
+                         contact_result=self.contact_result,
+                         type = self.paramter)
             print("当前页码 %d" % start)
             start += 1
             list = followMember(cookie, start)
