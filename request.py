@@ -26,8 +26,11 @@ def login(username, password):
 
 
 # 获取会员列表
-def followMember(cookie, page=1):
-    url = "https://www.styd.cn/club/member/sale_follow_premember?mix_cond=&p=" + str(page)
+def followMember(cookie, page=1, type='sale_premember'):
+    if type == 'sale_premember':
+        url = "https://www.styd.cn/club/member/sale_follow_premember?mix_cond=&p=" + str(page)
+    else :
+        url = "https://www.styd.cn/club/member/sale_follow_member?mix_cond=&p=" + str(page)
     result = requests.get(
         url,
         cookies=cookie,
@@ -71,7 +74,6 @@ def submit(cookie, staff_id, time, content, memberId, concat_type=1, contact_sta
         "member_id": memberId,
         "type": type,
         "staff_id": staff_id,  # 员工id
-        "contact_purpose": 1, # 销售跟进
         "contact_type": concat_type,  # 服务方式 1电话跟进 2短信跟进 3见面跟进 4email跟进
         "contact_status": contact_status,  # 通讯状态 1接通 0无人接听 2电话忙 3空号 4关机 5挂断 6停机
         "contact_result": contact_result,  # 通讯结果 1预约成功 0未预约成功
@@ -82,6 +84,8 @@ def submit(cookie, staff_id, time, content, memberId, concat_type=1, contact_sta
         "content": content,
         "next_contact": ""
     }
+    if type == 'sale_premember':
+        data['contact_purpose'] = 1, # 销售跟进
     print("提交数据 %s" % data)
     res = requests.post(url, cookies=cookie, data=data, headers=HEAD)
     print("提交会员跟进信息返回{%s}" % json.loads(res.content))

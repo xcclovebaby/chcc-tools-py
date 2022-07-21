@@ -177,7 +177,7 @@ class MainUi(QWidget):
         start = int(self.start.text())
         time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
         cookie = login(username, password)
-        list = followMember(cookie, start)
+        list = followMember(cookie, start, self.paramter)
         staff_id = None
         while len(list) > 0 and start < end:
             for memberId in list:
