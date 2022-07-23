@@ -195,7 +195,7 @@ class MainUi(QWidget):
                          type = self.paramter)
             print("当前页码 %d" % start)
             start += 1
-            list = followMember(cookie, start)
+            list = followMember(cookie, start, self.paramter)
 
 async def main():
     app = QApplication(sys.argv)
