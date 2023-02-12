@@ -1,4 +1,4 @@
-from request import login, followMember, saleMember, submit
+from api.request import login, followMember, saleMember, submit
 import datetime
 import sys
 import asyncio
