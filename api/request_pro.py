@@ -30,7 +30,7 @@ def switchShop(HEAD, shopId):
     print("获取切换门店返回状态{%s}" % result.content.decode('utf8'))
     token = json.loads(result.content.decode('utf8')).get('data').get('token')
     HEAD['token'] = token
-    HEAD['app-shop-id'] = shopId
+    HEAD['app-shop-id'] = str(shopId)
     cookie = result.cookies
     return cookie
 

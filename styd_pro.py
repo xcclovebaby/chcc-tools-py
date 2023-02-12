@@ -88,7 +88,7 @@ class MainUi(QWidget):
         # Cookie
         self.paswwordInput = QTextEdit()
         self.paswwordInput.setPlaceholderText("请输入Cookie")
-        self.paswwordInput.setFixedSize(800, 100)
+        self.paswwordInput.setFixedSize(490, 100)
 
         # 页码
         self.start = QLineEdit()
@@ -131,9 +131,9 @@ class MainUi(QWidget):
         formLayout.addRow("开始页码：", self.start)
         formLayout.addRow("结束页码：", self.end)
         formLayout.addRow("跟进内容：", self.content)
-        formLayout.addRow('跟进类型：', paramterBox)
-        formLayout.addRow('服务方式：', typeBox)
-        formLayout.addRow('通讯状态：', statusBox)
+        formLayout.addRow('会员分类：', paramterBox)
+        formLayout.addRow('方式：', typeBox)
+        formLayout.addRow('状态：', statusBox)
         formLayout.addRow('选择门店：', shopQVBoxLayout)
 
         btn = QPushButton("开始跟进")
@@ -193,17 +193,17 @@ class MainUi(QWidget):
         shopMap = shop(HEAD)
         self.shopBox.addItems(list(shopMap.keys()))
         self.shopId = list(shopMap.values())[0]
-        HEAD['app-shop-id'] = self.shopId
+        HEAD['app-shop-id'] = str(self.shopId)
 
     def OnBtnClicked(self):
         content = self.content.toPlainText()
         end = int(self.end.text())
         start = int(self.start.text())
-        time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
         cookie = switchShop(HEAD, self.shopId)
         list = followMember(HEAD, cookie, self.shopId, self.paramter)
         while len(list) > 0 and start < end:
             for memberId in list:
+                time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
                 submit(HEAD=HEAD,
                         cookie=cookie,
                          time=time,
