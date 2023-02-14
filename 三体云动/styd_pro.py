@@ -1,6 +1,14 @@
+"""
+三体云动Pro会员跟进程序
+--------------------------------------
+v.10 2023年2月13日
+--------------------------------------
+GitHub: https://github.com/xcclovebaby
+"""
 from api.request_pro import shop, switchShop, followMember, submit
 import datetime
 import sys
+import os
 import asyncio
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
@@ -60,7 +68,7 @@ class MainUi(QWidget):
         self.concat_type = 1
         self.contact_status = 1
         self.shopId = 0
-        self.paramter = "sale_premember"
+        self.paramter = 1
 
     def initGUI(self):
         QToolTip.setFont(QFont('SansSerif', 10))
@@ -195,35 +203,58 @@ class MainUi(QWidget):
         self.shopId = list(shopMap.values())[0]
         HEAD['app-shop-id'] = str(self.shopId)
 
+
     def OnBtnClicked(self):
         content = self.content.toPlainText()
         end = int(self.end.text())
         start = int(self.start.text())
         cookie = switchShop(HEAD, self.shopId)
+
+        styd_cookie = open('files\\styd_cookie.txt', 'w+')
+        styd_token = open('files\\styd_token.txt', 'w+')
+        password = self.paswwordInput.toPlainText()
+        styd_cookie.write(password)
+        styd_token.write(HEAD['token'])
+        styd_cookie.close()
+        styd_token.close()
+
         list = followMember(HEAD, cookie, self.shopId, self.paramter)
-        while len(list) > 0 and start < end:
-            for memberId in list:
-                time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
-                submit(HEAD=HEAD,
-                        cookie=cookie,
-                         time=time,
-                         content=content,
-                         memberId=memberId,
-                         concat_type=self.concat_type,
-                         contact_status=self.contact_status)
-            print("当前页码 %d" % start)
-            start += 1
-            list = followMember(HEAD, cookie, self.shopId, self.paramter, start)
+        try:
+            while len(list) > 0 and start < end:
+                for memberId in list:
+                    time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
+                    submit(HEAD=HEAD,
+                            cookie=cookie,
+                            time=time,
+                            content=content,
+                            memberId=memberId,
+                            concat_type=self.concat_type,
+                            contact_status=self.contact_status)
+                print("当前页码 %d" % start)
+                start += 1
+                list = followMember(HEAD, cookie, self.shopId, self.paramter, start)
+        except:
+            err_box = QMessageBox(QMessageBox.Information, '错误！！', '程序执行异常！！！')
+            err_box.exec_()
+
+        msg_box = QMessageBox(QMessageBox.Information, '成功！', '已运行完成！')
+        msg_box.exec_()
 
 async def main():
     app = QApplication(sys.argv)
     ui = MainUi()
     ui.show()
-    ui.usernameInput.setText("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJhcGktc2Fhcy5zdHlkLmNuIiwiaWF0IjoxNjc0ODc3NzM2LCJhdWQiOiIiLCJqdGkiOiIyXzZocUhBeXBvU2JqSFJJRXllMkUzck92TDBDZUpOWiIsIm5iZiI6MTY3NDg3NzcyNiwiZXhwIjoxNjc3NDY5NzM2LCJsb2dpbl90eXBlIjoxLCJpc19tdWx0aSI6MCwic3RhZmZfaWQiOjE4MDAxMTk3MTI4ODI2NTIsImJyYW5kX2lkIjoxNzg2Njc5ODg3NzI0NTk3LCJzaG9wX2lkIjowfQ.n8NUwvoG1Crv4Z5mC8nw_BTmJeXkTGjEAym9RbMfopU")
-    ui.paswwordInput.setText("acw_tc=707c9f7a16761879731346776e53b7b8b44796cd3b3d8d418eba688f71d64a; saas-token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJhcGktc2Fhcy5zdHlkLmNuIiwiaWF0IjoxNjc0ODc3NzM2LCJhdWQiOiIiLCJqdGkiOiIyXzZocUhBeXBvU2JqSFJJRXllMkUzck92TDBDZUpOWiIsIm5iZiI6MTY3NDg3NzcyNiwiZXhwIjoxNjc3NDY5NzM2LCJsb2dpbl90eXBlIjoxLCJpc19tdWx0aSI6MCwic3RhZmZfaWQiOjE4MDAxMTk3MTI4ODI2NTIsImJyYW5kX2lkIjoxNzg2Njc5ODg3NzI0NTk3LCJzaG9wX2lkIjowfQ.n8NUwvoG1Crv4Z5mC8nw_BTmJeXkTGjEAym9RbMfopU; third-party-token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJhcGktc2Fhcy5zdHlkLmNuIiwiaWF0IjoxNjc0ODc3NzM2LCJhdWQiOiIiLCJqdGkiOiIyXzZocUhBeXBvU2JqSFJJRXllMkUzck92TDBDZUpOWiIsIm5iZiI6MTY3NDg3NzcyNiwiZXhwIjoxNjc3NDY5NzM2LCJsb2dpbl90eXBlIjoxLCJpc19tdWx0aSI6MCwic3RhZmZfaWQiOjE4MDAxMTk3MTI4ODI2NTIsImJyYW5kX2lkIjoxNzg2Njc5ODg3NzI0NTk3LCJzaG9wX2lkIjowfQ.n8NUwvoG1Crv4Z5mC8nw_BTmJeXkTGjEAym9RbMfopU; _dd_s=logs=1&id=3421ef34-8ba0-4db8-8a19-144561d7a195&created=1676187972658&expire=1676189180410")
+    styd_cookie = open('files\\styd_cookie.txt', 'r')
+    cookie = styd_cookie.read()
+    styd_token = open('files\\styd_token.txt', 'r')
+    token = styd_token.read()
+    ui.usernameInput.setText(token)
+    ui.paswwordInput.setText(cookie)
     ui.start.setText("1")
     ui.end.setText("9999")
     sys.exit(app.exec_())
+    styd_cookie.close()
+    styd_token.close()
 
 if __name__ == '__main__':
     loop = asyncio.get_event_loop()
