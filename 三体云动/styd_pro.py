@@ -48,8 +48,6 @@ paramterMap = {
     "流失会员": 3
 }
 
-shopMap = {}
-
 class Stream(QObject):
     """Redirects console output to text widget."""
     newText = pyqtSignal(str)
@@ -192,7 +190,7 @@ class MainUi(QWidget):
         self.contact_status = statusMap.get(value)
 
     def onShopClicked(self,value):
-        self.shopId = shopMap.get(value)
+        self.shopId = self.shopMap.get(value)
 
     def shopClicked(self):
         username = self.usernameInput.toPlainText()
@@ -200,9 +198,9 @@ class MainUi(QWidget):
         HEAD['token'] = username
         HEAD['Cookie'] = password
         self.memberId = info(HEAD)
-        shopMap = shop(HEAD)
-        self.shopBox.addItems(list(shopMap.keys()))
-        self.shopId = list(shopMap.values())[0]
+        self.shopMap = shop(HEAD)
+        self.shopBox.addItems(list(self.shopMap.keys()))
+        self.shopId = list(self.shopMap.values())[0]
         HEAD['app-shop-id'] = str(self.shopId)
 
 
