@@ -16,6 +16,15 @@ def shop(HEAD):
         data[l.get('shop_name')] = l.get('shop_id')
     return data;
 
+def info(HEAD):
+    url = "https://pro.styd.cn/_api/v1/staff/info"
+    result = requests.get(
+        url,
+        headers=HEAD)
+    print("获取获取人员信息{%s}" % json.loads(result.content.decode('utf8')))
+    memberId = json.loads(result.content).get('data').get('info').get('staff_id')
+    return memberId
+
 # 切换门店
 def switchShop(HEAD, shopId):
     url = "https://pro.styd.cn/_api/v1/account/switch/shop"
@@ -35,17 +44,18 @@ def switchShop(HEAD, shopId):
     return cookie
 
 # 获取会员列表
-def followMember(HEAD, cookie, shopId, type=1, page=1):
-    url = "https://pro.styd.cn/_api/v1/member/club_member?" + \
-    "app_brand_id=1786679887724597&app_shop_id=ASI&member_level=ML&follow_salesman_id=-1&follow_coach_id=-1&follow_status=-1&tag_id=-1&buy_personal_course=-1&current_page=CP&has_face=-1&has_physical=-1&has_finger=-1&register_way=-1&status=1"
+def followMember(HEAD, cookie, shopId, memberId,type=1, page=1):
+    url = "https://pro.styd.cn/_api/v1/member/club_member?app_brand_id=1786679887724597&app_shop_id=ASI&member_level=ML&follow_salesman_id=MEMBERID&follow_coach_id=-1&follow_status=-1&tag_id=-1&buy_personal_course=-1&current_page=CP&has_face=-1&has_physical=-1&has_finger=-1&register_way=-1&status=1"
     url = url.replace("ASI", str(shopId))
     url = url.replace("ML", str(type))
     url = url.replace("CP", str(page))
+    url = url.replace('MEMBERID', str(memberId))
+    print(url)
     result = requests.get(
         url,
         cookies=cookie,
         headers=HEAD)
-    list = json.loads(result.content.decode('utf8')).get('data').get('list');
+    list = json.loads(result.content.decode('utf8')).get('data').get('list')
     memberIds = []
     for m in list:
         memberIds.append(m.get('member_id'))

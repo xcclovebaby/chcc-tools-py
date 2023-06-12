@@ -5,7 +5,7 @@ v.10 2023年2月13日
 --------------------------------------
 GitHub: https://github.com/xcclovebaby
 """
-from api.request_pro import shop, switchShop, followMember, submit
+from api.request_pro import shop, info, switchShop, followMember, submit
 import datetime
 import sys
 import os
@@ -69,6 +69,7 @@ class MainUi(QWidget):
         self.contact_status = 1
         self.shopId = 0
         self.paramter = 1
+        self.memberId = '';
 
     def initGUI(self):
         QToolTip.setFont(QFont('SansSerif', 10))
@@ -198,6 +199,7 @@ class MainUi(QWidget):
         password = self.paswwordInput.toPlainText()
         HEAD['token'] = username
         HEAD['Cookie'] = password
+        self.memberId = info(HEAD)
         shopMap = shop(HEAD)
         self.shopBox.addItems(list(shopMap.keys()))
         self.shopId = list(shopMap.values())[0]
@@ -217,8 +219,7 @@ class MainUi(QWidget):
         styd_token.write(HEAD['token'])
         styd_cookie.close()
         styd_token.close()
-
-        list = followMember(HEAD, cookie, self.shopId, self.paramter)
+        list = followMember(HEAD, cookie, self.shopId, self.memberId, self.paramter, start)
         try:
             while len(list) > 0 and start < end:
                 for memberId in list:
@@ -232,8 +233,9 @@ class MainUi(QWidget):
                             contact_status=self.contact_status)
                 print("当前页码 %d" % start)
                 start += 1
-                list = followMember(HEAD, cookie, self.shopId, self.paramter, start)
-        except:
+                list = followMember(HEAD, cookie, self.shopId, self.memberId, self.paramter, start)
+        except Exception as exp:
+            print(exp)
             err_box = QMessageBox(QMessageBox.Information, '错误！！', '程序执行异常！！！')
             err_box.exec_()
 
