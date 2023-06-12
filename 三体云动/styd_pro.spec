@@ -28,7 +28,7 @@ exe = EXE(
     a.zipfiles,
     a.datas,
     [],
-    name='三体云动Pro会员跟进程序',
+    name='styd_pro',
     debug=False,
     bootloader_ignore_signals=False,
     strip=False,
